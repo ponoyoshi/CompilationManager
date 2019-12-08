@@ -25,7 +25,7 @@ namespace StorybrewScripts
         [Configurable] public string textFont = "Verdana";
         [Configurable] public int textSize = 70;
         [Configurable] public TextOrigin textOrigin;
-        [Configurable] public float artistNameSize = 0.3f;
+        [Configurable] public float artistNameSize = 0.2f;
         [Configurable] public float songNameSize = 0.3f;
         [Configurable] public TextStyle artistStyle;
         [Configurable] public TextStyle songStyle;
