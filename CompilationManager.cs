@@ -43,6 +43,7 @@ namespace StorybrewScripts
         private FontGenerator font;
         private string filePath;
         private List<Section> compilationSections = new List<Section>();
+        private bool isCollab = false;
         public override void Generate()
         {
             GetLayer("").CreateSprite(baseBackground).Fade(0, 0);
@@ -82,14 +83,31 @@ namespace StorybrewScripts
                 if(lineValues[0] == "startTime")
                     continue;
 
-                compilationSections.Add(new Section(
-                    int.Parse(lineValues[0]),
-                    int.Parse(lineValues[1]),
-                    lineValues[2],
-                    lineValues[3],
-                    int.Parse(lineValues[4]),
-                    (BackgroundStyle)int.Parse(lineValues[5])
-                ));
+
+                if(lineValues.Length == 3)
+                {
+                    compilationSections.Add(new Section(
+                        int.Parse(lineValues[0]),
+                        int.Parse(lineValues[1]),
+                        lineValues[2],
+                        "",
+                        0,
+                        BackgroundStyle.BASE
+                    ));
+                    isCollab = true;
+                }
+                else
+                {
+                    compilationSections.Add(new Section(
+                        int.Parse(lineValues[0]),
+                        int.Parse(lineValues[1]),
+                        lineValues[2],
+                        lineValues[3],
+                        int.Parse(lineValues[4]),
+                        (BackgroundStyle)int.Parse(lineValues[5])
+                    ));
+                }
+                
             }
             Log($"Added {compilationSections.Count} compilation sections");
         }
@@ -100,9 +118,9 @@ namespace StorybrewScripts
 
             foreach(var section in compilationSections)
             {
-                GenerateBackground(section);
+                if(!isCollab) GenerateBackground(section);
                 GenerateText(section.startTime, section.endTime, section.artistName, artistPosition, artistNameSize, artistStyle);
-                GenerateText(section.startTime, section.endTime, section.songName, songPosition, songNameSize, songStyle);
+                if(!isCollab) GenerateText(section.startTime, section.endTime, section.songName, songPosition, songNameSize, songStyle);
             }
         }
         private void GenerateText(int startTime, int endTime, string text, Vector2 position, float scale, TextStyle style)
